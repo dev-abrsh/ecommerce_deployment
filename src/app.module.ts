@@ -9,7 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     JwtModule.register({global:true, secret: "screetkey"}),
-    MongooseModule.forRoot(''),
+    MongooseModule.forRoot('mongodb+srv://abraham2:abraham123@ecommercebackend.qutu1zv.mongodb.net/'),
     AuthModule, 
     UserModule
   ],

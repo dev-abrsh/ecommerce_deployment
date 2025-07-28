@@ -51,16 +51,7 @@ export class AuthService {
 
 
     }
-
-    //logout
-
-
-    async logout() {
-        // In a stateless JWT authentication system, logout is typically handled on the client side.
-        // You can implement token invalidation strategies if needed, but it's not common in JWT-based systems.
-        return { message: 'Logged out successfully' };
-    }
-
+    
     //refresh token
 
     //forgot password
