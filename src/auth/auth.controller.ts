@@ -1,7 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Post, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
-import { LoginDto } from './dtos/login.dto';
+import { ForgotPasswordDTO, LoginDto, VerifyEmailDto } from './dtos/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -19,18 +19,31 @@ export class AuthController {
         async login(@Body() LoginData: LoginDto) {
             return this.authService.login(LoginData);
         }
-
-
-        // post Refresh Token
-
-        // post Logout
-
         // post Forgot Password
+        @Post('forgot-password')
+        async forgotPassword(@Body() dto: ForgotPasswordDTO) {
+            return this.authService.forgotPassword(dto.email);
+        }
         // post Reset Password
-        // post Change Password
+        @Post('reset-password')
+        async resetPassword(
+            @Query('token') token: string,
+            @Body('password') password: string,
+        ) {
+            return this.authService.resetPassword(token, password);
+        }
+
         // post Verify Email
-        // post Resend Verification Email
+        @Post('verify-email')
+        async verifyEmail(@Body() VerifyData: VerifyEmailDto) {
+            try {
+            return await this.authService.verifyEmail(VerifyData.email, VerifyData.otp);
+            } catch (error) {
+            console.log(error);
+            throw new ForbiddenException('Unable to verify');
+            }
+        }
         // post Social Login
         // post Social Signup
-    
+        
 }
