@@ -5,11 +5,15 @@ import { User } from 'src/user/user.model';
 import { Model } from 'mongoose';
 import * as bcrypt from "bcrypt"
 import { LoginDto } from './dtos/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+    constructor(
+        @InjectModel(User.name) private userModel: Model<User>,
+        private jwtService: JwtService
+    ) {}
     async signup(signupData: SignupDto) {
         const {name, email, password} = signupData
 
@@ -48,8 +52,13 @@ export class AuthService {
 
          // Generate JWT token 
 
+         return this.generateUserToken(user._id)
 
+    }
+    async generateUserToken(userId) {
+        const accessToken = this.jwtService.sign({userId});
 
+        return {accessToken}
     }
     
     //refresh token

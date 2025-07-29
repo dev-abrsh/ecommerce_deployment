@@ -10,12 +10,20 @@ import config from './config/config';
 
 @Module({
   imports: [
-    JwtModule.register({global:true, secret: "screetkey"}),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('database.MONGODB_URI'),
       }),
+      inject: [ConfigService],
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('jwt.SECRET'),
+        signOptions: { expiresIn: '1d' } // Set token expiration
+      }),
+      global: true,
       inject: [ConfigService],
     }),
     AuthModule, 
