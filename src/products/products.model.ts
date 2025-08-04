@@ -1,6 +1,8 @@
-// src/product/product.model.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Category } from '../category/category.model';
+import { Brand } from '../brand/brand.model';
+
 
 export type ProductDocument = Product & Document;
 
@@ -18,11 +20,11 @@ export class Product {
   @Prop()
   rating: number;
 
-  @Prop({ required: true })
-  category_id: string; // reference to Categories table
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category', required: true })
+   category_id: MongooseSchema.Types.ObjectId;
 
-  @Prop({ required: true })
-  brand_id: string; // reference to Brand table
+   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Brand', required: true })
+    brand_id: MongooseSchema.Types.ObjectId;
 
   @Prop({ default: 0 })
   stock_quantity: number;
@@ -55,13 +57,7 @@ export class Product {
   warranty: string;
 
   @Prop()
-  created_by: string; // User ID of creator (Admin)
-
-  @Prop()
-  created_at: Date;
-
-  @Prop()
-  updated_at: Date;
+  created_by: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
