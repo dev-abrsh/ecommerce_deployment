@@ -4,7 +4,7 @@ export const emailVerificationTemplate = (
   return `
   <mjml>
   <mj-head>
-    <mj-title>Your Brand OTP Email</mj-title>
+    <mj-title>Techify OTP Email</mj-title>
     <mj-attributes>
       <mj-all font-family="Helvetica, Arial, sans-serif" />
       <mj-text line-height="2" />
@@ -15,7 +15,7 @@ export const emailVerificationTemplate = (
       <mj-column width="70%">
         <!-- Header / Logo -->
         <mj-text font-size="22px" font-weight="600" color="#00466a" padding-bottom="10px" border-bottom="1px solid #eee">
-          <a href="#" style="color: #00466a; text-decoration: none;">Your Brand</a>
+          <a href="#" style="color: #00466a; text-decoration: none;">Techify</a>
         </mj-text>
 
         <!-- Greeting -->
@@ -25,7 +25,7 @@ export const emailVerificationTemplate = (
 
         <!-- Message -->
         <mj-text font-size="16px">
-          Thank you for choosing Your Brand. Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes.
+          Thank you for choosing Techify. Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes.
         </mj-text>
 
         <!-- OTP Code -->
@@ -36,7 +36,7 @@ export const emailVerificationTemplate = (
         <!-- Signature -->
         <mj-text font-size="14px" padding-top="20px">
           Regards,<br />
-          Your Brand
+          Techify Team
         </mj-text>
 
         <!-- Divider -->
@@ -44,7 +44,7 @@ export const emailVerificationTemplate = (
 
         <!-- Footer -->
         <mj-text align="right" font-size="13px" color="#aaa" line-height="1.5" font-weight="300">
-          Your Brand Inc<br />
+          Techify Inc<br />
           1600 Amphitheatre Parkway<br />
           California
         </mj-text>

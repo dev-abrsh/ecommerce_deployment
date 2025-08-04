@@ -163,6 +163,9 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException('Invalid token');
       }
+      if(user.otpExpires && new Date() > user.otpExpires) {
+        throw new UnauthorizedException('OTP has expired');
+      }
       await this.userModel.updateOne({ id: user.id },{ is_verified: true });
 
       return { message: 'Email Verified successfully' };
@@ -206,5 +209,18 @@ export class AuthService {
       console.log(error);
       throw new NotFoundException('Invalid or expired token');
     }
+  }
+  async validateGoogleUser(googleUser:{name:string,email:string}){
+    const user = await this.userModel.findOne({ email: googleUser.email });
+    if (user)return user;
+    return this.userModel.create(
+          {
+            name: googleUser.name,
+            email: googleUser.email,
+            password: '',
+            is_verified: false,
+          },
+        
+      );
   }
 }

@@ -8,9 +8,21 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from './config/config';
 import { ProductsModule } from './products/products.module';
+import { OrderModule } from './order/order.module';
+import { OrderItemModule } from './order-item/order-item.module';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { ChapaModule } from 'chapa-nestjs';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
+     ChapaModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secretKey: configService.get<string>('chapa.secretKey')!,
+      })
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -34,7 +46,11 @@ import { ProductsModule } from './products/products.module';
       isGlobal: true, 
       cache: true,
       load: [config]
-    })
+    }),
+    OrderModule,
+    OrderItemModule,
+    AnalyticsModule,
+    PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],

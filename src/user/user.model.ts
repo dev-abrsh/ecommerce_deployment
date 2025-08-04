@@ -29,6 +29,9 @@ export class User extends Document {
   @Prop({ default: null })
   otp: string;
 
+ @Prop({ default: () => new Date(Date.now() + 5 * 60 * 1000) })
+  otpExpires: Date;
+
   @Prop({ default: false })
   is_verified: boolean;
 

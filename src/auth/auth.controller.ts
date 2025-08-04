@@ -1,7 +1,8 @@
-import { Body, Controller, ForbiddenException, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
 import { ForgotPasswordDTO, LoginDto, VerifyEmailDto } from './dtos/login.dto';
+import { GoogleAuthGuard } from 'src/gurads/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -42,6 +43,21 @@ export class AuthController {
             }
         }
         // post Social Login
+				@UseGuards(GoogleAuthGuard)
+				@Get("google/login")
+				async googleLogin() {
+					
+				}
+
+				@UseGuards(GoogleAuthGuard)
+				@Get("google/callback")
+				async googleCallback(@ Req() req, @Res() res) {
+                    // this.authService.config.get<string>('FRONTEND_URL')
+					const response = await this.authService.generateUserToken(req.user._id, req.user.role);
+                    res.redirect(`${process.env.FRONTEND_URL!}/auth/google/callback?token=${response.accessToken}`);
+                }
+                
+					
         // post Social Signup
         
 }
