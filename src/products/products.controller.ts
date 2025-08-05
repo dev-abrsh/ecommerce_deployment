@@ -25,7 +25,7 @@ export class ProductsController {
   @Roles('admin') // Only admin can create products
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.createProduct(createProductDto);
+    return this.productsService. createProduct(createProductDto);
   }
 
   @Get()
