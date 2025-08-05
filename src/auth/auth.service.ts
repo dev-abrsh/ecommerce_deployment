@@ -166,14 +166,11 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException('Invalid token');
       }
-<<<<<<< HEAD
       if(user.otpExpires && new Date() > user.otpExpires) {
         throw new UnauthorizedException('OTP has expired');
       }
       await this.userModel.updateOne({ id: user.id },{ is_verified: true });
-=======
       await this.userModel.updateOne({ _id: user._id }, { is_verified: true });
->>>>>>> 2fe38fec8ccd9d50fbd9b4914d7470c3e28bc071
 
       return { message: 'Email Verified successfully' };
     } catch (error) {
