@@ -9,6 +9,21 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
+  async getAllUsers() {
+    return this.userModel.find().select('name email phone address role is_verified createdAt updatedAt');
+  }
+
+  async getUserById(id: string) {
+    const user = await this.userModel.findById(id).select('name email phone address role is_verified createdAt updatedAt');
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+  async deleteUser(id: string) {
+    const user = await this.userModel.findByIdAndDelete(id);
+    if (!user) throw new NotFoundException('User not found');
+    return { message: 'User deleted successfully' };
+  }
+
   async getProfile(userId: string) {
     const user = await this.userModel
       .findById(userId)

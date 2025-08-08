@@ -17,6 +17,7 @@ import { resetPasswordTemplate } from 'src/mail/templates/password-reset.templat
 import { emailVerificationTemplate } from 'src/mail/templates/email-confirmation.template';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -126,7 +127,7 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
     const token = await this.gettoken(user.id, user.email, '1d');
-    const resetUrl = `${process.env.URL}/auth/reset-password`;
+    const resetUrl = `${this.config.get<string>('frontendUrl')}/reset-password`;
     const hashed = await bcrypt.hash(token, 10);
     await this.userModel.updateOne(
       { email },

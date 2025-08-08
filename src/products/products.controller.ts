@@ -16,17 +16,20 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from 'src/gurads/auth.guard';
 import { RolesGuard } from 'src/gurads/roles.gurad';
 import { Roles } from 'src/gurads/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-  
+
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin') // Only admin can create products
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService. createProduct(createProductDto);
+    return this.productsService.createProduct(createProductDto);
   }
+  
 
   @Get()
   async getAllProducts() {
@@ -38,6 +41,7 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin') // Only admin can update products
   @Put(':id')
@@ -48,6 +52,7 @@ export class ProductsController {
     return this.productsService.updateProduct(id, updateProductDto);
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin') // Only admin can delete products
   @Delete(':id')
