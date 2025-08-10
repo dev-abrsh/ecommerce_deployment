@@ -2,9 +2,9 @@ import { IsNotEmpty, IsMongoId, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateOrderItemDto {
-  @IsMongoId()
-  @IsNotEmpty()
-  order_id: string;
+  // @IsMongoId()
+  // @IsNotEmpty()
+  // order_id: string;
 
   @IsMongoId()
   @IsNotEmpty()

@@ -21,7 +21,7 @@ export class SignupDto{
     @IsString()
     address?: string;
 
-    @IsOptional()
-    @IsEnum(UserRole, { message: 'Role must be either ADMIN or CUSTOMER.' } )
-    role?: UserRole = UserRole.CUSTOMER; // Default to CUSTOMER if not provided
+    // @IsOptional()
+    // @IsEnum(UserRole, { message: 'Role must be either ADMIN or CUSTOMER.' } )
+    // role?: UserRole = UserRole.CUSTOMER; // Default to CUSTOMER if not provided
 }

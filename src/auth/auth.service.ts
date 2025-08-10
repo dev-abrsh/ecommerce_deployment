@@ -81,6 +81,55 @@ export class AuthService {
     }
   }
 
+   async ResendOTP(email: string) {
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    try {
+      // const { name, email, password } = signupData;
+      // Check if email already exists
+      const existingUser = await this.userModel
+        .findOne({ email })
+        .session(session);
+      if (!existingUser) {
+        throw new BadRequestException("Email doesn't exist please signup first");
+      }
+      if (existingUser.is_verified) {
+        throw new BadRequestException('Email already verified');
+      }
+      // Generate OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      // Create user
+      await this.userModel.findByIdAndUpdate(
+        existingUser._id,
+        {
+          otp,
+          otpExpires:new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
+          is_verified: false,
+        },
+        { session }
+      );
+
+
+      // You **can** optionally save the OTP in the DB or email it directly
+      await this.sendVerificationEmail(otp, email);
+
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+
+      return { message: 'OTP resend successfully. Please check your email.' };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+
+      if (error instanceof BadRequestException) throw error;
+
+
+      console.error('Signup Error:', error);
+      throw new Error('An unexpected error occurred during sending OTP');
+    }
+  }
+
   async login(loginData: LoginDto) {
     const { email, password } = loginData;
     // check if the user exists

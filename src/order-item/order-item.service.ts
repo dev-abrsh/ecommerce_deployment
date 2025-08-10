@@ -55,7 +55,7 @@ export class OrderItemService {
       this.orderItemModel
         .find(filter)
         .populate('product_id')
-        .populate('order_id')
+        // .populate('order_id')
         .skip(skip)
         .limit(pageSize)
         .exec(),

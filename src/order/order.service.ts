@@ -95,7 +95,17 @@ export class OrderService {
   }
 
   async findOne(id: string) {
-    const order = await this.orderModel.findById(id).populate('user_id');
+    const order = await this.orderModel
+    .findById(id)
+    .populate({
+      path: 'order_items',
+      populate: {
+        path: 'product_id',
+        model: 'Product'
+      }
+    })
+    .populate('user_id');
+
     if (!order) throw new NotFoundException(`Order with ID ${id} not found`);
     return order;
   }

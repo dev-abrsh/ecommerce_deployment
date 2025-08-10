@@ -40,7 +40,11 @@ export class AuthController {
     const { token, password } = dto;
     return this.authService.resetPassword(token, password);
   }
-
+  // post resend OTP
+  @Post('resend-otp')
+  async resendOTP(@Body('email') email: string) {
+    return this.authService.ResendOTP(email);
+  }
   // post Verify Email
   @Post('verify-email')
   async verifyEmail(@Body() VerifyData: VerifyEmailDto) {

@@ -1,9 +1,11 @@
 import {
-	IsMongoId,
-	IsNotEmpty,
-	IsNumber,
-	IsOptional,
-	IsString
+  IsArray,
+  ArrayNotEmpty,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString
 } from 'class-validator';
 
 export class CreateOrderDto {
@@ -11,9 +13,10 @@ export class CreateOrderDto {
   @IsNotEmpty()
   user_id: string;
 
-  @IsString()
-  @IsNotEmpty()
-  status: string;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsMongoId({ each: true }) // validate each element in array is a valid ObjectId
+  order_items: string[];
 
   @IsNumber()
   @IsNotEmpty()
@@ -22,5 +25,4 @@ export class CreateOrderDto {
   @IsOptional()
   @IsString()
   payment_status?: string;
-
 }

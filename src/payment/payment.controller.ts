@@ -19,6 +19,7 @@ export class PaymentController {
     } else {
       await this.orderService.update(orderId, {
         payment_status: 'failed',
+        status: 'cancelled',
       });
     }
 

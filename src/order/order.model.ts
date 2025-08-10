@@ -3,12 +3,16 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
+@Schema({ timestamps: true })
 export class Order extends Document {
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user_id: Types.ObjectId;
 
-  @Prop({ required: true })
-  status: string;
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'OrderItem' }], default: [] })
+  order_items: Types.ObjectId[];
+
+  @Prop({ default: 'pending' })
+  status: string; // pending, shipped, delivered, canceled
 
   @Prop()
   payment_reference?: string;
@@ -16,7 +20,7 @@ export class Order extends Document {
   @Prop({ required: true })
   total_price: number;
 
-  @Prop({ default: 'pending' }) // or enum: 'pending' | 'paid' | 'failed' | 'refunded'
+  @Prop({ default: 'pending' })
   payment_status?: string;
 }
 
