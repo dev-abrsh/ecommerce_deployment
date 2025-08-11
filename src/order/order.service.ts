@@ -37,11 +37,12 @@ export class OrderService {
       amount: order.total_price.toString(),
       tx_ref: tx_ref,
       callback_url: `${this.configService.get<string>('BASE_URL')}/payment/callback/${order._id}`,
-      return_url: `${this.configService.get<string>('frontendUrl')}/order/confirmation/${order._id}`,
+      return_url:`https://www.google.com/`,
+      // return_url: `${this.configService.get<string>('frontendUrl')}/order/confirmation/${order._id}`,
       customization: {
-        title: 'Techify E-Commerce Order',
+        title: 'Techify',
         description: `Payment for order ${order._id}`,
-        logo: '/asset/TechifyImageLogo.png',
+        // logo: '/asset/TechifyImageLogo.png',
 
       },
     });
