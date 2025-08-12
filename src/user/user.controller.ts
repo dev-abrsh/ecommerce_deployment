@@ -37,7 +37,7 @@ export class UserController {
   }
 
   @Roles('admin') // Only admin can see all users
-  @Get('all')
+  @Get('')
   async getAllUsers() {
     return this.userService.getAllUsers();
   }
