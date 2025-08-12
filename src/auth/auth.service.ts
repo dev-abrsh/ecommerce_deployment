@@ -267,15 +267,16 @@ export class AuthService {
       throw new NotFoundException('Invalid or expired token');
     }
   }
-  async validateGoogleUser(googleUser:{name:string,email:string}){
+  async validateGoogleUser(googleUser:{name:string,email:string,is_verified:boolean}){
     const user = await this.userModel.findOne({ email: googleUser.email });
+    console.log("googleUser: ",googleUser);
     if (user)return user;
     return this.userModel.create(
           {
             name: googleUser.name,
             email: googleUser.email,
-            password: '',
-            is_verified: false,
+            password: ' ',
+            is_verified: googleUser.is_verified,
           },
         
       );
