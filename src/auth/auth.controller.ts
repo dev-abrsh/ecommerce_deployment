@@ -11,12 +11,21 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
-import { ForgotPasswordDTO, LoginDto, ResetPasswordDto, VerifyEmailDto } from './dtos/login.dto';
+import {
+  ForgotPasswordDTO,
+  LoginDto,
+  ResetPasswordDto,
+  VerifyEmailDto,
+} from './dtos/login.dto';
 import { GoogleAuthGuard } from 'src/gurads/google-auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private config: ConfigService,
+  ) {}
   // post signup
   @Post('signup')
   async signup(@Body() signUpData: SignupDto) {
@@ -35,8 +44,7 @@ export class AuthController {
   }
   // post Reset Password
   @Post('reset-password')
- async resetPassword(@Body() dto: ResetPasswordDto)
-   {
+  async resetPassword(@Body() dto: ResetPasswordDto) {
     const { token, password } = dto;
     return this.authService.resetPassword(token, password);
   }
@@ -72,7 +80,7 @@ export class AuthController {
       req.user.role,
     );
     res.redirect(
-      `${process.env.FRONTEND_URL!}/auth/google/callback?token=${response.accessToken}`,
+      `${this.config.get<string>('frontendUrl')}/auth/google/callback?token=${response.accessToken}`,
     );
   }
 
