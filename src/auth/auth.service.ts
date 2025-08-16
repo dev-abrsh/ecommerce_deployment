@@ -278,7 +278,6 @@ export class AuthService {
             password: ' ',
             is_verified: googleUser.is_verified,
           },
-        
       );
   }
 }

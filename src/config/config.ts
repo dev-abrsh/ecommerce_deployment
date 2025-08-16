@@ -17,5 +17,11 @@ export default () => ({
         publicKey: process.env.CHAPA_PUBLIC_KEY,
         encryptionKey: process.env.CHAPA_ENCRYPTION_KEY
     },
-    frontendUrl: process.env.FRONTEND_URL
+    frontendUrl: process.env.FRONTEND_URL,
+
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        apiSecret: process.env.CLOUDINARY_API_SECRET
+    }
 })

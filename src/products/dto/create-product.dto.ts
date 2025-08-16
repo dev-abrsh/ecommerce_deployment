@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -15,10 +17,12 @@ export class CreateProductDto {
   @IsOptional()
   description?: string;
 
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   price: number;
 
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   rating?: number;
@@ -31,13 +35,14 @@ export class CreateProductDto {
   @IsNotEmpty()
   brand_id: string;
 
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   stock_quantity?: number;
 
   @IsString()
   @IsOptional()
-  image_url?: string;
+  image?: string;
 
   @IsString()
   @IsOptional()
@@ -74,4 +79,9 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   created_by?: string;
+}
+
+export class CreateProductWithImageDto extends CreateProductDto {
+  @ApiProperty({ type: 'string', format: 'binary', required: false})
+  declare image: any;
 }

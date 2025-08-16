@@ -9,14 +9,22 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
+import {
+  CreateProductDto,
+  CreateProductWithImageDto,
+} from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from 'src/gurads/auth.guard';
 import { RolesGuard } from 'src/gurads/roles.gurad';
 import { Roles } from 'src/gurads/roles.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerImageConfig } from 'src/config/multer.config';
 
 @Controller('products')
 export class ProductsController {
@@ -26,10 +34,17 @@ export class ProductsController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin') // Only admin can create products
   @Post()
-  async createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.createProduct(createProductDto);
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateProductWithImageDto })
+  @UseInterceptors(FileInterceptor('image', multerImageConfig))
+  async createProduct(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() dto: CreateProductDto,
+  ) {
+    if (!file) throw new BadRequestException('Image file is required');
+    const url = await this.productsService.uploadImage(file);
+    return this.productsService.createProduct(dto, url);
   }
-  
 
   @Get()
   async getAllProducts() {

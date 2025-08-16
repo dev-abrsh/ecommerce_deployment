@@ -13,15 +13,17 @@ import { OrderItemModule } from './order-item/order-item.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ChapaModule } from 'chapa-nestjs';
 import { PaymentModule } from './payment/payment.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
   imports: [
-     ChapaModule.registerAsync({
+    ChapaModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secretKey: configService.get<string>('chapa.secretKey')!,
-      })
+      }),
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -34,23 +36,25 @@ import { PaymentModule } from './payment/payment.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('jwt.SECRET'),
-        signOptions: { expiresIn: '1d' } // Set token expiration
+        signOptions: { expiresIn: '1d' }, // Set token expiration
       }),
       global: true,
       inject: [ConfigService],
     }),
-    AuthModule, 
+    AuthModule,
     UserModule,
     ProductsModule,
     ConfigModule.forRoot({
-      isGlobal: true, 
+      isGlobal: true,
       cache: true,
-      load: [config]
+      load: [config],
     }),
     OrderModule,
     OrderItemModule,
     AnalyticsModule,
-    PaymentModule
+    PaymentModule,
+    DeliveryModule,
+    CloudinaryModule.forRootAsync(),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -26,6 +26,7 @@ const config = new DocumentBuilder()
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true,
       forbidNonWhitelisted: true,
     }),
   );
