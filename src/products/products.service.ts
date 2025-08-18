@@ -6,7 +6,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { v2 as cloudinary, UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { Readable } from 'stream';
-
+import { Types } from 'mongoose';
 
 @Injectable()
 export class ProductsService {
@@ -57,6 +57,41 @@ export class ProductsService {
     const result = await this.productModel.findByIdAndDelete(id);
     if (!result) throw new NotFoundException('Product not found');
   }
+
+
+// ✅ New filter method
+ async filterProducts(filters: {
+  category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}): Promise<Product[]> {
+  const query: any = {};
+
+  // Convert category and brand to ObjectId if they exist
+  if (filters.category && Types.ObjectId.isValid(filters.category)) {
+    query.category_id = new Types.ObjectId(filters.category);
+  }
+
+  if (filters.brand && Types.ObjectId.isValid(filters.brand)) {
+    query.brand_id = new Types.ObjectId(filters.brand);
+  }
+
+  // Price filter
+  if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+    query.price = {};
+    if (filters.minPrice !== undefined) query.price.$gte = filters.minPrice;
+    if (filters.maxPrice !== undefined) query.price.$lte = filters.maxPrice;
+  }
+
+  return this.productModel
+    .find(query)
+    .populate('category_id')
+    .populate('brand_id')
+    .exec();
+}
+
+
   /**
    * Upload an image from Multer memory buffer to Cloudinary via upload_stream.
    * Returns the secure_url string.

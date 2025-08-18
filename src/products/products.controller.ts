@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Put,
+  Query,
   Delete,
   HttpCode,
   HttpStatus,
@@ -51,11 +52,26 @@ export class ProductsController {
     return this.productsService.getAllProducts();
   }
 
+
+
+@Get('filter')
+async filterProducts(
+  @Query('category') category?: string,
+  @Query('brand') brand?: string,
+  @Query('minPrice') minPrice?: string,
+  @Query('maxPrice') maxPrice?: string,
+) {
+  return this.productsService.filterProducts({
+    category,
+    brand,
+    minPrice: minPrice ? parseFloat(minPrice) : undefined,
+    maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+  });
+}
   @Get(':id')
   async getProductById(@Param('id') id: string) {
     return this.productsService.getProductById(id);
   }
-
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin') // Only admin can update products
