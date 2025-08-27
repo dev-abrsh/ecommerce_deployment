@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module, Global } from '@nestjs/common';
 import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
