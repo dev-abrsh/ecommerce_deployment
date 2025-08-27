@@ -15,6 +15,7 @@ import { ChapaModule } from 'chapa-nestjs';
 import { PaymentModule } from './payment/payment.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { DeliveryModule } from './delivery/delivery.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { DeliveryModule } from './delivery/delivery.module';
       cache: true,
       load: [config],
     }),
+    MailModule,
     OrderModule,
     OrderItemModule,
     AnalyticsModule,
